@@ -1,6 +1,6 @@
 const express = require("express");
-const { createServer } = require("http");
-const { Server } = require("socket.io");
+// const { createServer } = require("http");
+// const { Server } = require("socket.io");
 const mongoose = require("mongoose");
 const axios = require("axios"); // const axios'
 const cors = require("cors");
@@ -9,13 +9,13 @@ require("dotenv").config();
 mongoose.Promise = global.Promise;
 
 const app = express();
-const server = createServer(app);
-const io = new Server(server, {
-	cors: {
-		origin: "*",
-        methods: ["GET", "POST"]
-	},
-});
+// const server = createServer(app);
+// const io = new Server(server, {
+// 	cors: {
+// 		origin: "*",
+//         methods: ["GET", "POST"]
+// 	},
+// });
 
 const dataset =require('./model/dataset.js')
 
@@ -115,42 +115,42 @@ app.get("/dataset", (req, res) => {
 // });
 
 // Set up Socket.IO
-io.on("connection", (socket) => {
-    console.log("A client connected: ", socket.id);
+// io.on("connection", (socket) => {
+//     console.log("A client connected: ", socket.id);
 
-    socket.on("subscribeToDataset", async (params) => {
-        console.log(`Client ${socket.id} subscribed to device ${params.device_id} and index ${params.index_id}`);
+//     socket.on("subscribeToDataset", async (params) => {
+//         console.log(`Client ${socket.id} subscribed to device ${params.device_id} and index ${params.index_id}`);
 
-        try {
-            const changeStream = dataset.watch([
-                {
-                    $match: {
-                        operationType: "insert",
-                        "fullDocument.device_id": params.device_id,
-                        "fullDocument.index_id": params.index_id,
-                    },
-                },
-            ]);
+//         try {
+//             const changeStream = dataset.watch([
+//                 {
+//                     $match: {
+//                         operationType: "insert",
+//                         "fullDocument.device_id": params.device_id,
+//                         "fullDocument.index_id": params.index_id,
+//                     },
+//                 },
+//             ]);
 
-            changeStream.on("change", (change) => {
-                if (change.operationType === "insert") {
-                    const newData = change.fullDocument;
-                    console.log(newData)
-                    console.log(`New data for device ${params.device_id} and index ${params.index_id}:`, newData);
-                    socket.emit(`newData-${params.device_id}-${params.index_id}`, newData);
-                }
-            });
+//             changeStream.on("change", (change) => {
+//                 if (change.operationType === "insert") {
+//                     const newData = change.fullDocument;
+//                     console.log(newData)
+//                     console.log(`New data for device ${params.device_id} and index ${params.index_id}:`, newData);
+//                     socket.emit(`newData-${params.device_id}-${params.index_id}`, newData);
+//                 }
+//             });
 
-            socket.on("disconnect", () => {
-                console.log(`Client ${socket.id} disconnected`);
-                changeStream.close();
-            });
-        } catch (err) {
-            console.error(`Error subscribing to dataset for device ${params.device_id} and index ${params.index_id}:`, err);
-            socket.emit("error", err);
-        }
-    });
-});
+//             socket.on("disconnect", () => {
+//                 console.log(`Client ${socket.id} disconnected`);
+//                 changeStream.close();
+//             });
+//         } catch (err) {
+//             console.error(`Error subscribing to dataset for device ${params.device_id} and index ${params.index_id}:`, err);
+//             socket.emit("error", err);
+//         }
+//     });
+// });
 
 app.get("/", (req, res) => {
 	res.send({ message: "Halooo" });
