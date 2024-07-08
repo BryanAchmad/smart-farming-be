@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+const { Schema, model } = require("mongoose");
 
 const datasetSchema = new Schema(
   {
@@ -13,4 +13,4 @@ const datasetSchema = new Schema(
 
 const dataset = model("datasets", datasetSchema);
 
-export default dataset;
+module.exports = dataset;

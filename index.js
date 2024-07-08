@@ -1,12 +1,10 @@
-import express from "express";
-import { createServer } from "http";
-import { Server } from "socket.io";
-import mongoose, { connect, Schema, model } from "mongoose";
-import axios from "axios"; // Import axios'
-import cors from "cors";
-import qs from "querystring"
-import dotenv from 'dotenv';
-dotenv.config();
+const express = require("express");
+const { createServer } = require("http");
+const { Server } = require("socket.io");
+const mongoose = require("mongoose");
+const axios = require("axios"); // const axios'
+const cors = require("cors");
+require("dotenv").config();
 
 mongoose.Promise = global.Promise;
 
@@ -19,7 +17,7 @@ const io = new Server(server, {
 	},
 });
 
-import dataset from './model/dataset.js'
+const dataset =require('./model/dataset.js')
 
 mongoose
 	.connect(process.env.MONGO_URI, {

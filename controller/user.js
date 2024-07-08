@@ -1,5 +1,5 @@
-import { Router } from "express";
-import axios from "axios";
+const { Router } = require("express");
+const axios = require("axios");
 const router = Router();
 
 router.get('/login', (req, res) => {
@@ -7,4 +7,4 @@ router.get('/login', (req, res) => {
     
 })
 
-export default router;
+module.exports = router;
