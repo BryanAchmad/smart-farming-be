@@ -13,7 +13,7 @@ const server = createServer(app);
 const io = new Server(server, {
 	cors: {
 		origin: "https://smart-farming-virid.vercel.app",
-		methods: ["GET", "POST"],
+		methods: ["*"],
 	},
 });
 
@@ -37,6 +37,7 @@ mongoose
 app.use(
     cors({
         origin: "https://smart-farming-virid.vercel.app", // Allow the specific origin of your frontend
+        methods: ["*"], // Allow all methods
     })
 );
 // Middleware
