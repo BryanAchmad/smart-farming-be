@@ -33,11 +33,6 @@ mongoose
 			console.log("Could not connect to database : " + error);
 		}
 	);
-app.use(
-	cors({
-		origin: "*",
-	})
-);
 // Middleware
 app.use(express.json());
 
