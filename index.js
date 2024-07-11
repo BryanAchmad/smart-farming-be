@@ -12,7 +12,7 @@ const app = express();
 const server = createServer(app);
 const io = new Server(server, {
 	cors: {
-		origin: "*",
+		origin: ["*", "https://smart-farming-virid.vercel.app/"],
 		methods: ["GET", "POST"],
 	},
 });
