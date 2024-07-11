@@ -12,7 +12,7 @@ const app = express();
 const server = createServer(app);
 const io = new Server(server, {
 	cors: {
-		origin: "https://smart-farming-virid.vercel.app/",
+		origin: "https://smart-farming-virid.vercel.app",
 		methods: ["GET", "POST"],
 	},
 });
@@ -33,6 +33,12 @@ mongoose
 			console.log("Could not connect to database : " + error);
 		}
 	);
+
+app.use(
+    cors({
+        origin: "https://smart-farming-virid.vercel.app", // Allow the specific origin of your frontend
+    })
+);
 // Middleware
 app.use(express.json());
 
