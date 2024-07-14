@@ -13,8 +13,12 @@ const server = createServer(app);
 const io = new Server(server, {
 	cors: {
 		origin: ["http://localhost:5173","https://smart-farming-virid.vercel.app"],
-		methods: ["*"],
+		methods: ["GET", "POST"],
+		credentials: true
 	},
+	transports: ['websocket', 'polling'], // Add this line
+	pingTimeout: 60000, // Add this line
+	pingInterval: 25000 // Add this line
 });
 
 const Dataset = require("./model/dataset.js");
@@ -78,8 +82,9 @@ app.get("/dataset", (req, res) => {
 });
 
 io.on("connection", (socket) => {
+	console.log('New client connected');
 	socket.on("getData", async ({ device_id, index_id }) => {
-        console.log(device_id, index_id);
+		console.log(`getData request for device_id: ${device_id}, index_id: ${index_id}`);
         try {
             // Emit initial data
             const initialData = await getLatestData(device_id, index_id);
@@ -94,6 +99,7 @@ io.on("connection", (socket) => {
             changeStream.on('change', async (change) => {
                 if (change.operationType === 'insert') {
                     const newData = change.fullDocument;
+					console.log('Emitting new data:', newData);
                     socket.emit('data', newData);
                 }
             });
@@ -107,6 +113,10 @@ io.on("connection", (socket) => {
             socket.emit('error', 'An error occurred while fetching data');
         }
 	});
+
+	socket.on('disconnect', (reason) => {
+		console.log(`Client disconnected. Reason: ${reason}`);
+	  });
 });
 
 async function getLatestData(device_id, index_id) {
