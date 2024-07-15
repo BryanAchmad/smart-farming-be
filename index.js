@@ -8,7 +8,7 @@ const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
 const axios = require("axios");
 
-const Dataset = require("./models/dataset");
+const Dataset = require("./model/dataset.js");
 const { setupSocketHandlers } = require("./socketHandlers");
 
 // Initialize Express app
